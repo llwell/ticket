@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import List from '@/components/List'
 import Play from '@/components/Play'
 import Home from '@/components/Home'
+
 Vue.use(Router)
 
 export default new Router({
