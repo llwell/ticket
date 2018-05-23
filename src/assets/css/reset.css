@@ -8,7 +8,7 @@ html, body {
     width: 100%;
     min-height: 100%;
     font-size:12px;
-    background: #000;
+    /*background: #000;*/
 }
 
 body {
@@ -108,16 +108,4 @@ button{
 
 .to-fixed{
     position: fixed;
-}
-.f16{
-    font-size: 16px;
-}
-.f15{
-    font-size: 15px;
-}
-.f14{
-    font-size: 14px;
-}
-.mt55{
-    margin-top: 55px;
 }

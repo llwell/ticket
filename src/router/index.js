@@ -16,10 +16,6 @@ export default new Router({
       path: '/list',
       name: 'list',
       component: List,
-    },{
-      path: '/play',
-      name: 'play',
-      component: Play
     }
   ]
 })
