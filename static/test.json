@@ -1,0 +1,88 @@
+{
+  "main":{
+    "img":"http://localhost:8080/static/L6.png",
+    "word":"运动",
+    "text":"运动有益于身心"
+  },
+  "item": [
+    {
+      "id": 1,
+      "img":"../src/assets/img/L1.png",
+      "name": "你的饮食习惯正确吗?10个容易忽视的餐桌健康小问题",
+      "time": "1028/01/01",
+      "person": "主讲人: 东1 优妃"
+    },{
+      "id": 2,
+      "img":"../src/assets/img/L2.png",
+      "name": "这里是第2个",
+      "time": "1028/01/01",
+      "person": "主讲人: 东2 优妃"
+    },{
+      "id": 3,
+      "img":"../src/assets/img/L3.png",
+      "name": "这里是第3个",
+      "time": "1028/01/03",
+      "person": "主讲人: 东3 优妃"
+    },{
+      "id": 4,
+      "img":"../src/assets/img/L4.png",
+      "name": "这里是第4个",
+      "time": "1028/01/04",
+      "person": "主讲人: 东4 优妃"
+    },{
+      "id": 5,
+      "img":"../src/assets/img/L5.png",
+      "name": "这里是第5个",
+      "time": "1028/01/05",
+      "person": "主讲人: 东5 优妃"
+    },{
+      "id": 6,
+      "img":"../src/assets/img/L6.png",
+      "name": "这里是第6个",
+      "time": "1028/01/06",
+      "person": "主讲人: 东6 优妃"
+    },{
+      "id": 7,
+      "img":"../src/assets/img/L7.png",
+      "name": "这里是第7个",
+      "time": "1028/01/07",
+      "person": "主讲人: 东7 优妃"
+    },{
+      "id": 8,
+      "img":"../src/assets/img/L8.png",
+      "name": "这里是第8个",
+      "time": "1028/01/08",
+      "person": "主讲人: 东8 优妃"
+    }
+  ],
+  "play":{
+    "playcon":"这里是播放页"
+  },
+  "playItem": [
+    {
+      "id": 1,
+      "img":"../src/assets/img/L1.png",
+      "name": "你的饮食习惯正确吗?10个容易忽视的餐桌健康小问题",
+      "time": "1028/01/01",
+      "person": "主讲人: 东1 优妃"
+    },{
+      "id": 2,
+      "img":"../src/assets/img/L2.png",
+      "name": "这里是第2个",
+      "time": "1028/01/01",
+      "person": "主讲人: 东2 优妃"
+    },{
+      "id": 3,
+      "img":"../src/assets/img/L3.png",
+      "name": "这里是第3个",
+      "time": "1028/01/03",
+      "person": "主讲人: 东3 优妃"
+    },{
+      "id": 4,
+      "img":"../src/assets/img/L4.png",
+      "name": "这里是第4个",
+      "time": "1028/01/04",
+      "person": "主讲人: 东4 优妃"
+    }
+  ]
+}
