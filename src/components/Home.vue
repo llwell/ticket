@@ -69,22 +69,9 @@ import axios from 'axios'
     export default{
         data(){
             return {
-              // tabTitle:['待处理','审批中','已完成'],
               activeTop: 0,
               activeBottom: 0,
-              tabPaneOneData:[
-                {
-                img:'http://ecc-product.oss-cn-beijing.aliyuncs.com/xcx/地图-icon@3x.png',
-                ticketNum:'小票1号码154854247sdsfs',
-                state:'待处理',
-                ticketPrice:'66.66'
-              },{
-                img:'http://ecc-product.oss-cn-beijing.aliyuncs.com/xcx/地图-icon@3x.png',
-                ticketNum:'小票2号码154854247sdsfs',
-                state:'已退回',
-                ticketPrice:'77.77'
-              }
-              ],
+              tabPaneOneData:[],
               tabPaneTwoData:[
                 {
                 img:'http://ecc-product.oss-cn-beijing.aliyuncs.com/xcx/地图-icon@3x.png',
@@ -108,6 +95,23 @@ import axios from 'axios'
             }
         },
         mounted:function () {
+          //请求拿到 所有状态数据
+          //  json 格式内 Home等外层名称，只作为页面所需接口存放的容器，并非接口字段
+          axios.get('http://localhost:8080/static/test.json', {})
+            .then(function (response) {
+              console.log(response);
+                  response.data.Home.tabPaneOneData.forEach((item)=>{
+                    this.tabPaneOneData.push(item);
+                  })
+              // this.tabPaneOneData = response.data.Home.tabPaneOneData;
+              // this.tabPaneTwoData = response.data.Home.tabPaneTwoData;
+              // this.tabPaneThreeData = response.data.Home.tabPaneThreeData;
+
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+
           // axios.get("http://yuki.llwell.net/api/vlist/entry/1/false").then(response => {
           //     response.data.forEach((item)=>{
           //       this.unitList.push(item);
