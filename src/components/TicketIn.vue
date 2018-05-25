@@ -11,13 +11,13 @@
     <!--<van-cell-group>-->
     <div class="form">
       <van-field
-        v-model="ticketNum"
+        v-model="mes.ticketNum"
         label="订单编号"
         placeholder="请输入订单编号"
         required
       />
       <van-field
-        v-model="shopName"
+        v-model="mes.shopName"
         label="店名"
         placeholder="请输入店名"
         required
@@ -29,12 +29,12 @@
             <van-icon name="photograph" />
           </van-uploader>
           <div class="pic">
-            <img :src="imgbasesrc" alt="">
+            <img :src="mes.imgbasesrc" alt="">
           </div>
         </div>
       </div>
       <van-button size="normal" @click="clickAdd" style="margin-left: 10px;line-height: 1rem;">添加商品</van-button>
-      <div class='' v-for="index in goodsAll">
+      <div class='' v-for="index in mes.goodsAll">
         <div class="unit">
           <van-field
             v-model="index.goodsName"
@@ -58,19 +58,22 @@
 </template>
 
 <script>
+  import { Toast } from 'vant';
 import axios from 'axios'
 export default {
   name: 'HelloWorld',
   data () {
     return {
+      mes:{
+        ticketNum:'',
+        shopName:'',
+        imgbasesrc:'',
+        goodsAll:[{
+          goodsName:'',
+          goodsPrice:''
+        }]
+      }
 
-      ticketNum:'',
-      shopName:'',
-      imgbasesrc:'',
-      goodsAll:[{
-        goodsName:'',
-        goodsPrice:''
-      }]
 
     }
   },
@@ -89,21 +92,46 @@ export default {
     },
     onRead(file) {
       // console.log(file)
-      this.imgbasesrc = file.content;
+      this.mes.imgbasesrc = file.content;
     },
     clickAdd(){
-      this.goodsAll.push({
+      this.mes.goodsAll.push({
         goodsName: '',
         goodsPrice: ''
       });
     },
     submitForm(){
-      // if(){
-      //
-      // }else{
-      //
-      // }
-      console.log(this.goodsAll)
+      if(this.ifGoodsAllNull()&& this.ifMesNull()){
+        console.log('都填了 可以发送请求')
+        Toast.success('提交成功');
+        this.$router.push('/')
+        console.log(this.mes)
+      }else{
+        // console.log('请填入完整信息')
+        Toast('请填入完整信息');
+      }
+    },
+    ifGoodsAllNull(){
+      let returns = true;
+      this.mes.goodsAll.forEach((item)=>{
+        if (item.goodsName==''||item.goodsPrice==''){
+          returns = false;
+        } else{
+          //return true;
+        }
+      });
+      return returns;
+    },
+    ifMesNull(){
+      let returnMes = true;
+      for(let item in this.mes){
+        if (this.mes[item]=='') {
+          returnMes =  false;
+        }else{
+          // return true;
+        }
+      }
+      return returnMes;
     }
   },
 }

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import List from '@/components/List'
-import Play from '@/components/Play'
+import TicketIn from '@/components/TicketIn'
+import Personage from '@/components/Personage'
 import Home from '@/components/Home'
 
 Vue.use(Router)
@@ -13,9 +13,13 @@ export default new Router({
       name: 'home',
       component: Home
     },{
-      path: '/list',
-      name: 'list',
-      component: List,
+      path: '/TicketIn',
+      name: 'TicketIn',
+      component: TicketIn,
+    },{
+      path: '/Personage',
+      name: 'Personage',
+      component: Personage,
     }
   ]
 })

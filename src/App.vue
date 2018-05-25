@@ -9,6 +9,7 @@
       <!-- 通过传入 `to` 属性指定链接. -->
       <!-- <router-link> 默认会被渲染成一个 `<a>` 标签 -->
 <script>
+
 export default {
   name: 'App'
 }
