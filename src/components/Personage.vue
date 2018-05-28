@@ -14,12 +14,12 @@
     <div class="wrap">
       <div class="content">
         <div class="mes">
-          <img :src="headPortrait" alt="">
-          <div class="p">{{name}}</div>
+          <img :src="mes.headPortrait" alt="">
+          <div class="p">{{mes.name}}</div>
         </div>
 
         <div class="code">
-          <img :src="code" alt="">
+          <img :src="mes.code" alt="">
         </div>
         <div class="refresh" @click="onRefresh">
           点我更新二维码
@@ -34,9 +34,12 @@
   export default {
     data() {
       return {
-        headPortrait:'http://ecc-product.oss-cn-beijing.aliyuncs.com/test/photo.png',
-        name:'你的名字',
-        code:'http://ecc-product.oss-cn-beijing.aliyuncs.com/test/code.png'
+        mes:{
+          headPortrait:'',
+          name:'',
+          code:''
+        }
+
       }
     },
     created() {
@@ -50,10 +53,29 @@
         this.$router.push('/test')
       },
       onRefresh(){
-        console.log('刷新二维码')
+        console.log('刷新二维码');
+        var _this = this;
+        axios.get('http://localhost:8080/static/test.json', {
+//              token:"",
+//              method:"",
+//              param:{
+//                  orderId:'asasa'
+//              }
+        })
+          .then(function (response) {
+            _this.mes.code = response.data.personage.code
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      },
+      getMes(){
+        this.mes =this.$route.params
       }
     },
     mounted:function () {
+      console.log("123123",this.$route.params)
+      this.getMes()
       // axios.get(`http://yuki.llwell.net/api/vlist/video/${this.$route.query.ids}/true`).then(response => {
       //     console.log(response)
       //     response.data.goods.forEach((item)=>{

@@ -42,7 +42,7 @@
             placeholder="请输入名称"
             required
           />
-          <van-field
+          <van-field class="borBotGray"
             v-model="index.goodsPrice"
             label="合计金额"
             placeholder="输入总金额"
@@ -50,7 +50,6 @@
           />
         </div>
       </div>
-
     </div>
     <!--</van-cell-group>-->
     <van-button size="large" @click="submitForm">提交</van-button>
@@ -59,82 +58,119 @@
 
 <script>
   import { Toast } from 'vant';
-import axios from 'axios'
-export default {
-  name: 'HelloWorld',
-  data () {
-    return {
-      mes:{
-        ticketNum:'',
-        shopName:'',
-        imgbasesrc:'',
-        goodsAll:[{
-          goodsName:'',
-          goodsPrice:''
-        }]
+  import axios from 'axios'
+  export default {
+    name: 'HelloWorld',
+    data () {
+      return {
+        mes:{
+          ticketNum:'',
+          shopName:'',
+          imgbasesrc:'',
+          goodsAll:[{
+            goodsName:'',
+            goodsPrice:''
+          }]
+        }
       }
-
-
-    }
-  },
-  created() {
-  },
-  mounted:function () {
+    },
+    created() {
+    },
+    mounted:function () {
+      console.log(this.$route.params)
+        this.getEditMes();
+//      console.log('~~~')
+//      console.log(this.$route.params)
       // axios.get(`http://yuki.llwell.net/api/vlist/item/${this.$route.query.ids}/false`).then(response => {
       //     response.data.forEach((item)=>{
       //       this.itemList.push(item);
       //     })
       // });
     },
-  methods:{
-    onClickLeft() {
-      this.$router.push('/')
-    },
-    onRead(file) {
-      // console.log(file)
-      this.mes.imgbasesrc = file.content;
-    },
-    clickAdd(){
-      this.mes.goodsAll.push({
-        goodsName: '',
-        goodsPrice: ''
-      });
-    },
-    submitForm(){
-      if(this.ifGoodsAllNull()&& this.ifMesNull()){
-        console.log('都填了 可以发送请求')
-        Toast.success('提交成功');
-        this.$router.push('/')
-        console.log(this.mes)
-      }else{
-        // console.log('请填入完整信息')
-        Toast('请填入完整信息');
-      }
-    },
-    ifGoodsAllNull(){
-      let returns = true;
-      this.mes.goodsAll.forEach((item)=>{
-        if (item.goodsName==''||item.goodsPrice==''){
-          returns = false;
+    methods:{
+      getEditMes(){
+        this.mes={}
+        if (this.$route.params.active==undefined){
+          this.mes = this.$route.params
         } else{
-          //return true;
+          this.mes={
+            ticketNum:'',
+            shopName:'',
+            imgbasesrc:'',
+            goodsAll:[{
+              goodsName:'',
+              goodsPrice:''
+            }]
+          }
         }
-      });
-      return returns;
-    },
-    ifMesNull(){
-      let returnMes = true;
-      for(let item in this.mes){
-        if (this.mes[item]=='') {
-          returnMes =  false;
+      },
+      onClickLeft() {
+        this.$router.push('/')
+      },
+      onRead(file) {
+        console.log(file)
+        this.mes.imgbasesrc = file.content;
+        // console.log('filesss',file.content.split(',')[1])
+      },
+      clickAdd(){
+        console.log(this.mes)
+        this.mes.goodsAll.push({
+          goodsName: '',
+          goodsPrice: ''
+        });
+      },
+
+      submitForm(){
+        if(this.ifGoodsAllNull()&& this.ifMesNull()){
+          console.log('都填了 可以发送请求')
+          console.log(this.mes)
+          //请求拿到 所有状态数据
+          //  json 格式内 Home等外层名称，只作为页面所需接口存放的容器，并非接口字段
+          var _this = this;
+          axios.get('http://localhost:8080/static/test.json', {
+//              token:"",
+//              method:"",
+//              param:{
+//                  orderId:'asasa'
+//              }
+          })
+            .then(function (response) {
+              Toast.success('提交成功');
+              _this.$router.push('/')
+
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
         }else{
-          // return true;
+          // console.log('请填入完整信息')
+          Toast('请填入完整信息');
         }
+      },
+      ifGoodsAllNull(){
+        let returns = true;
+        this.mes.goodsAll.forEach((item)=>{
+          if (item.goodsName==''||item.goodsPrice==''){
+            returns = false;
+          } else{
+            //return true;
+          }
+        });
+        return returns;
+      },
+      ifMesNull(){
+        let returnMes = true;
+        for(let item in this.mes){
+          if (this.mes[item]=='') {
+            returnMes =  false;
+          }else{
+            // return true;
+          }
+        }
+        return returnMes;
       }
-      return returnMes;
-    }
-  },
-}
+    },
+  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -149,6 +185,9 @@ export default {
     }
     /*border: 1px solid rebeccapurple;*/
     .form{
+      .borBotGray{
+        border-bottom:1px solid #f5efef ;
+      }
       margin-top: 50px;
       .t_upload{
         /*border: 1px solid red;*/
@@ -159,7 +198,7 @@ export default {
       }
       .unit{
         display: flex;
-        justify-content: space-between;;
+        justify-content: space-between;
       }
     }
   }

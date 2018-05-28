@@ -41,6 +41,27 @@
         "ticketPrice":"66.66"
       }
     ]
+  },
+  "ticketEdit":{
+    "mes":{
+      "ticketNum":"123",
+      "shopName":"dianasdkaj",
+      "imgbasesrc":"",
+      "goodsAll":[{
+        "goodsName":"上品",
+        "goodsPrice":"55.6666"
+      },{
+        "goodsName":"上品22",
+        "goodsPrice":"55.66333"
+      }]
+    }
+  },
+  "personage":{
+    "about":{
+      "headPortrait":"http://ecc-product.oss-cn-beijing.aliyuncs.com/test/photo.png",
+      "name":"你的名字"
+    },
+    "code":"http://ecc-product.oss-cn-beijing.aliyuncs.com/test/code.png"
   }
 
 

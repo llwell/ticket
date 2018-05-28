@@ -7,6 +7,7 @@ import axios from 'axios'
 
 import './assets/css/reset.css'
 import 'lib-flexible'
+const global = require('./../src/global/global')
 import { Tab, Tabs,Tabbar, TabbarItem,Card,Button ,Popup,Field,NavBar,Uploader ,Icon     } from 'vant';
 Vue.config.productionTip = false
 Vue.prototype.$ajax = axios
