@@ -109,16 +109,19 @@
       }
     },
     mounted:function () {
+      console.log(this.$route.params);
       if(this.$route.query.token == undefined){
         new Promise(resolve => {
           if(global.getToken()==undefined){
             global.getAccredit();
           }
-
-        })
-          .then(function () {
+else{
             this.getTicketRecord();
-          })
+          }
+        })
+          // .then(function () {
+          //   this.getTicketRecord();
+          // })
       }
       else{
         global.setToken(this.$route.query.token);
@@ -132,20 +135,26 @@
         //请求拿到 所有状态数据
         //  json 格式内 Home等外层名称，只作为页面所需接口存放的容器，并非接口字段
         var _this = this;
-        axios.get('http://localhost:8080/static/test.json', {
-//              token:"",
-//              method:"",
-//              param:{
-//                  orderId:'asasa'
-//              }
-        })
+        // axios.post('http://192.168.0.109/Ticket/Ticket', {
+        //      token:'22222',
+        //   method:'GetTicketList',
+        //   param:{
+        //     token:'22222'
+        //   }
+        // })
+        global.Ajax('Ticket/Ticket','2222','GetTicketList',{'token':'22222'})
           .then(function (response) {
-            _this.tabPaneOneData=[]
-            response.data.Home.tabPaneOneData.forEach((item)=>{
-              _this.tabPaneOneData.push(item);
-            })
-            _this.tabPaneTwoData = response.data.Home.tabPaneTwoData;
-            _this.tabPaneThreeData = response.data.Home.tabPaneThreeData;
+            console.log('aaa',response)
+            if(response.success){
+              console.log('ooo',response)
+              _this.tabPaneOneData=[]
+              response.data.tabPaneOneData.forEach((item)=>{
+                __this.tabPaneOneData.push(item);
+              })
+              _this.tabPaneTwoData = response.data.tabPaneTwoData;
+              _this.tabPaneThreeData = response.data.tabPaneThreeData;
+            }
+
 
           })
           .catch(function (error) {
