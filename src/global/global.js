@@ -1,6 +1,6 @@
 import axios from 'axios'
 // const apiUrl = 'http://192.168.0.109/api/'
-const apiUrl = 'http://weixin.llwell.net/api/'
+const apiUrl = 'http://ticket.llwell.net/api/'
 export default {
   Ajax(group, token, method, param){
     let params = {
@@ -19,7 +19,7 @@ export default {
     })
   },
   getAccredit(){
-    axios.post('http://weixin.llwell.net/api/Weixin/OAuth', {
+    axios.post('http://ticket.llwell.net/api/ticket/OAuth', {
         token: "",
         method: "GetOAuthUrl",
         param: {

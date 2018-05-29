@@ -150,13 +150,13 @@
       getPersonage(){
         var _this = this;
 
-        // axios.post('http://weixin.llwell.net/api/Weixin/OAuth', {
+        // axios.post('http://ticket.llwell.net/api/ticket/OAuth', {
         //   token: global.getToken(),
         //   method: "GetUser",
         //   param: { token: global.getToken() }
         //
         // })
-        global.Ajax('Weixin/OAuth',global.getToken(),'GetUser',{"token": global.getToken()})
+        global.Ajax('ticket/OAuth',global.getToken(),'GetUser',{"token": global.getToken()})
           .then(function (responseName) {
            console.log("~~~",responseName)
             axios.get('http://localhost:8080/static/test.json', {
@@ -233,7 +233,7 @@
           "ticketNum":index.ticketNum,
           "state":index.state
         }
-        global.Ajax('Weixin/OAuth',global.getToken(),'GetUser',params)
+        global.Ajax('ticket/OAuth',global.getToken(),'GetUser',params)
           .then(function (response) {
             _this.getTicketRecord()
           })
