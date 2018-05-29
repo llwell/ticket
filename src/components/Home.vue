@@ -67,6 +67,7 @@
 
   import axios from 'axios'
   import global from '../global/global'
+  import { Toast } from 'vant';
   export default{
     data(){
       return {
@@ -127,9 +128,9 @@
         var _this = this;
         global.Ajax('Ticket/Ticket',global.getToken(),'GetTicketList',{'token':global.getToken()})
           .then(function (response) {
-            console.log('aaa',response)
+            // console.log('aaa',response)
             if(response.success){
-              console.log('ooo',response)
+              // console.log('ooo',response)
               _this.tabPaneOneData=[];
               _this.tabPaneTwoData=[];
               _this.tabPaneThreeData=[];
@@ -139,9 +140,10 @@
               _this.tabPaneOneData = response.data.tabPaneOneData;
               _this.tabPaneTwoData = response.data.tabPaneTwoData;
               _this.tabPaneThreeData = response.data.tabPaneThreeData;
+            }else{
+              global.checkApiToken(response.msg.code);
+              Toast('出错信息：'+response.msg.code+' '+response.msg.msg);
             }
-
-
           })
           .catch(function (error) {
             console.log(error);
@@ -204,7 +206,7 @@
 
 
       onEdit(index){
-           console.log(index)
+           // console.log(index)
         //请求拿到 所有状态数据
         //  json 格式内 Home等外层名称，只作为页面所需接口存放的容器，并非接口字段
         var _this = this;
@@ -215,12 +217,17 @@
            }
         global.Ajax('Ticket/Ticket',global.getToken(),'GetTicketItem',params)
           .then(function (response) {
-            let res = {
-              ...response.data,
-              "state":index.state
+            if(response.success) {
+              let res = {
+                ...response.data,
+                "state": index.state
+              }
+              _this.$router.push({name: 'TicketIn', params: res})
+              // console.log(res)
+            }else{
+              global.checkApiToken(response.msg.code);
+              Toast('出错信息：'+response.msg.code+' '+response.msg.msg);
             }
-            _this.$router.push({name:'TicketIn',params:res})
-            console.log(res)
           })
           .catch(function (error) {
             console.log(error);
@@ -233,9 +240,14 @@
           "ticketNum":index.ticketNum,
           "state":index.state
         }
-        global.Ajax('ticket/OAuth',global.getToken(),'GetUser',params)
+        global.Ajax('Ticket/Ticket',global.getToken(),'DelTicket',params)
           .then(function (response) {
-            _this.getTicketRecord()
+            if(response.success){
+              _this.getTicketRecord()
+            }else{
+              global.checkApiToken(response.msg.code);
+              Toast('出错信息：'+response.msg.code+' '+response.msg.msg);
+            }
           })
           .catch(function (error) {
             console.log(error);

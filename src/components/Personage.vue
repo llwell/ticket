@@ -32,6 +32,8 @@
 <script>
   import axios from 'axios'
   import global from "../global/global";
+  import { Toast } from 'vant';
+
   export default {
     data() {
       return {

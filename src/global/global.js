@@ -41,4 +41,9 @@ export default {
   setToken(token){
     sessionStorage.setItem("token", token);
   },
+  checkApiToken(code){
+    if(code == 4000){
+      getAccredit();
+    }
+  },
 }

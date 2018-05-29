@@ -137,9 +137,14 @@
                       console.log('==',params)
           global.Ajax('Ticket/Ticket',global.getToken(),'InsertTicket',params)
             .then(function (response) {
-              console.log('提交',response)
-              Toast.success('提交成功');
-              _this.$router.push('/')
+              if(response.success) {
+                // console.log('提交', response)
+                Toast.success('提交成功');
+                _this.$router.push('/')
+              }else{
+                global.checkApiToken(response.msg.code);
+                Toast('出错信息：'+response.msg.code+' '+response.msg.msg);
+              }
 
             })
             .catch(function (error) {
