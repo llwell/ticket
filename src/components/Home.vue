@@ -111,46 +111,32 @@
     mounted:function () {
       console.log(this.$route.params);
       if(this.$route.query.token == undefined){
-        new Promise(resolve => {
-          if(global.getToken()==undefined){
-            global.getAccredit();
-          }
-else{
-            this.getTicketRecord();
-          }
-        })
-          // .then(function () {
-          //   this.getTicketRecord();
-          // })
-      }
-      else{
+        if(global.getToken()==undefined){
+          global.getAccredit();
+        }else{
+          this.getTicketRecord();
+        }
+      }else{
         global.setToken(this.$route.query.token);
       }
     },
     methods: {
-
-
-
       getTicketRecord(){
         //请求拿到 所有状态数据
         //  json 格式内 Home等外层名称，只作为页面所需接口存放的容器，并非接口字段
         var _this = this;
-        // axios.post('http://192.168.0.109/Ticket/Ticket', {
-        //      token:'22222',
-        //   method:'GetTicketList',
-        //   param:{
-        //     token:'22222'
-        //   }
-        // })
-        global.Ajax('Ticket/Ticket','2222','GetTicketList',{'token':'22222'})
+        global.Ajax('Ticket/Ticket',global.getToken(),'GetTicketList',{'token':global.getToken()})
           .then(function (response) {
             console.log('aaa',response)
             if(response.success){
               console.log('ooo',response)
-              _this.tabPaneOneData=[]
-              response.data.tabPaneOneData.forEach((item)=>{
-                __this.tabPaneOneData.push(item);
-              })
+              _this.tabPaneOneData=[];
+              _this.tabPaneTwoData=[];
+              _this.tabPaneThreeData=[];
+            //   response.data.tabPaneOneData.forEach((item)=>{
+            //     _this.tabPaneOneData.push(item);
+            // })
+              _this.tabPaneOneData = response.data.tabPaneOneData;
               _this.tabPaneTwoData = response.data.tabPaneTwoData;
               _this.tabPaneThreeData = response.data.tabPaneThreeData;
             }
@@ -163,12 +149,14 @@ else{
       },
       getPersonage(){
         var _this = this;
-        axios.post('http://weixin.llwell.net/api/Weixin/OAuth', {
-          token: global.getToken(),
-          method: "GetUser",
-          param: { token: global.getToken() }
 
-        })
+        // axios.post('http://weixin.llwell.net/api/Weixin/OAuth', {
+        //   token: global.getToken(),
+        //   method: "GetUser",
+        //   param: { token: global.getToken() }
+        //
+        // })
+        global.Ajax('Weixin/OAuth',global.getToken(),'GetUser',{"token": global.getToken()})
           .then(function (responseName) {
            console.log("~~~",responseName)
             axios.get('http://localhost:8080/static/test.json', {
@@ -180,8 +168,8 @@ else{
             })
               .then(function (responseCode) {
                 // console.log({code:responseCode.data.personage.code})
-                let response =  Object.assign(responseName.data.personage.about,{code:responseCode.data.personage.code})
-                // console.log(response)
+                let response =  Object.assign(responseName.data.appobj,{code:responseCode.data.personage.code})
+                console.log('send',response)
                 _this.$router.push({name:'Personage',params:response})
               })
               .catch(function (error) {
@@ -216,22 +204,23 @@ else{
 
 
       onEdit(index){
-//            console.log(index)
+           console.log(index)
         //请求拿到 所有状态数据
         //  json 格式内 Home等外层名称，只作为页面所需接口存放的容器，并非接口字段
         var _this = this;
-        axios.get('http://localhost:8080/static/test.json', {
-//              token:"",
-//              method:"",
-//              param:{
-//                  ticketNum:index.ticketNum,
-//                  state:index.state
-//              }
-        })
+           let params = {
+             "token": global.getToken(),
+             "ticketNum":index.ticketNum,
+             "state":index.state
+           }
+        global.Ajax('Ticket/Ticket',global.getToken(),'GetTicketItem',params)
           .then(function (response) {
-            _this.$router.push({name:'TicketIn',params:response.data.ticketEdit.mes})
-            console.log(response)
-
+            let res = {
+              ...response.data,
+              "state":index.state
+            }
+            _this.$router.push({name:'TicketIn',params:res})
+            console.log(res)
           })
           .catch(function (error) {
             console.log(error);
@@ -239,33 +228,19 @@ else{
       },
       onDelete(index){
         var _this = this;
-        axios.get('http://localhost:8080/static/test.json', {
-//              token:"",
-//              method:"",
-//              param:{
-//                  ticketNum:index.ticketNum,
-//                  state:index.state
-//              }
-        })
+        let params = {
+          "token": global.getToken(),
+          "ticketNum":index.ticketNum,
+          "state":index.state
+        }
+        global.Ajax('Weixin/OAuth',global.getToken(),'GetUser',params)
           .then(function (response) {
-
             _this.getTicketRecord()
-
           })
           .catch(function (error) {
             console.log(error);
           });
       },
-
-      // listClick(ids,list_inner_img){
-      //     this.$router.push({
-      //       name: 'list',
-      //       params: {
-      //         ids:ids,
-      //         list_inner_img:list_inner_img,
-      //       }
-      //     })
-      // }
     }
   }
 </script>

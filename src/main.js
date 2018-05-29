@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import axios from 'axios'
-
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 import './assets/css/reset.css'
 import 'lib-flexible'
 

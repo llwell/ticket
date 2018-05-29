@@ -59,6 +59,7 @@
 <script>
   import { Toast } from 'vant';
   import axios from 'axios'
+  import global from '../global/global'
   export default {
     name: 'HelloWorld',
     data () {
@@ -108,12 +109,12 @@
         this.$router.push('/')
       },
       onRead(file) {
-        console.log(file)
+        // console.log(file)
         this.mes.imgbasesrc = file.content;
         // console.log('filesss',file.content.split(',')[1])
       },
       clickAdd(){
-        console.log(this.mes)
+        // console.log(this.mes)
         this.mes.goodsAll.push({
           goodsName: '',
           goodsPrice: ''
@@ -127,14 +128,16 @@
           //请求拿到 所有状态数据
           //  json 格式内 Home等外层名称，只作为页面所需接口存放的容器，并非接口字段
           var _this = this;
-          axios.get('http://localhost:8080/static/test.json', {
-//              token:"",
-//              method:"",
-//              param:{
-//                  orderId:'asasa'
-//              }
-          })
+          let params = {
+                        ...this.mes,
+                        'token':global.getToken(),
+                        'state':this.$route.params.state?this.$route.params.state:'',
+
+                      }
+                      console.log('==',params)
+          global.Ajax('Ticket/Ticket',global.getToken(),'InsertTicket',params)
             .then(function (response) {
+              console.log('提交',response)
               Toast.success('提交成功');
               _this.$router.push('/')
 

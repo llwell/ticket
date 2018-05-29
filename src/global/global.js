@@ -1,15 +1,23 @@
 import axios from 'axios'
-const apiUrl = 'http://192.168.0.109/api/'
+// const apiUrl = 'http://192.168.0.109/api/'
+const apiUrl = 'http://weixin.llwell.net/api/'
 export default {
-
   Ajax(group, token, method, param){
-    return axios.post(apiUrl+group ,{
+    let params = {
       token: token,
       method: method,
       param: param
+    }
+    return new Promise((resolve,reject)=>{
+      axios.post(apiUrl+group ,params)
+        .then(response=>{
+          resolve(response.data)
+        })
+        .catch((err)=>{
+          reject(err)
+        })
     })
   },
-
   getAccredit(){
     axios.post('http://weixin.llwell.net/api/Weixin/OAuth', {
         token: "",
@@ -27,7 +35,6 @@ export default {
       });
   },
   getToken(){
-
     return sessionStorage.getItem("token");
   },
   setToken(token){
