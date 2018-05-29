@@ -156,7 +156,7 @@
         //   param: { token: global.getToken() }
         //
         // })
-        global.Ajax('ticket/OAuth',global.getToken(),'GetUser',{"token": global.getToken()})
+        global.Ajax('Weixin/OAuth',global.getToken(),'GetUser',{"token": global.getToken()})
           .then(function (responseName) {
            console.log("~~~",responseName)
             axios.get('http://localhost:8080/static/test.json', {

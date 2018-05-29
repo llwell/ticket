@@ -19,7 +19,7 @@ export default {
     })
   },
   getAccredit(){
-    axios.post('http://ticket.llwell.net/api/ticket/OAuth', {
+    axios.post('http://ticket.llwell.net/api/Weixin/OAuth', {
         token: "",
         method: "GetOAuthUrl",
         param: {
