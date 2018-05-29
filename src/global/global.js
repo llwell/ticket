@@ -23,7 +23,8 @@ export default {
         token: "",
         method: "GetOAuthUrl",
         param: {
-          returnUrl:"http://localhost:8080/"
+          // returnUrl:"http://localhost:8080/"
+          returnUrl:"http://ticket.llwell.net/"
         }
     })
       .then(function (response) {
