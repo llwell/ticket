@@ -58,7 +58,7 @@
         var _this = this;
         global.Ajax('Ticket/Users',global.getToken(),'UpdateQRCoder',{"token": global.getToken()})
           .then(function (response) {
-            _this.mes.code = response.data
+            _this.mes.code = response.data.url
           })
           .catch(function (error) {
             console.log(error);

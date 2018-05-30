@@ -162,7 +162,7 @@
                     if(responseCode.success){
                       console.log(response.data)
                       console.log(responseCode.data)
-                      let res =  Object.assign(response.data,{code:responseCode.data})
+                      let res =  Object.assign(response.data,{code:responseCode.data.url})
                       console.log('send',res)
                       _this.$router.push({name:'Personage',params:res})
                     }else{

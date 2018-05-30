@@ -111,3 +111,6 @@ button{
 .to-fixed{
     position: fixed;
 }
+.none{
+  display: none;
+}

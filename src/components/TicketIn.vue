@@ -15,17 +15,19 @@
         label="订单编号"
         placeholder="请输入订单编号"
         required
+        :disabled="disabled"
       />
       <van-field
         v-model="mes.shopName"
         label="店名"
         placeholder="请输入店名"
         required
+        :disabled="disabled"
       />
       <div class="van-cell van-cell--required van-field t_upload">
         <div class="van-cell__title">请上传图片</div>
         <div class="van-cell__value" style="text-align: left">
-          <van-uploader :after-read="onRead">
+          <van-uploader :after-read="onRead" :class="picdisable">
             <van-icon name="photograph" />
           </van-uploader>
           <div class="pic">
@@ -34,25 +36,27 @@
         </div>
       </div>
       <van-button size="normal" @click="clickAdd" style="margin-left: 10px;line-height: 1rem;">添加商品</van-button>
-      <div class='' v-for="index in mes.goodsAll">
+      <div class='' v-for="(item, index) in mes.goodsAll">
         <div class="unit">
           <van-field
-            v-model="index.goodsName"
+            v-model="item.goodsName"
             label="品牌名称"
             placeholder="请输入名称"
             required
           />
-          <van-field class="borBotGray"
-            v-model="index.goodsPrice"
+          <van-field
+            v-model="item.goodsPrice"
             label="合计金额"
             placeholder="输入总金额"
             required
           />
+          <div :class="index==0?'':'none'" style="width:50px "> </div>
+          <div :class="index==0?'none':'btnDelete'"  @click="onRemove(index)">×</div>
         </div>
       </div>
     </div>
     <!--</van-cell-group>-->
-    <van-button size="large" @click="submitForm">提交</van-button>
+    <van-button size="large" @click="submitForm" >提交</van-button>
   </div>
 </template>
 
@@ -64,6 +68,8 @@
     name: 'HelloWorld',
     data () {
       return {
+        disabled:false,
+        picdisable:'',
         mes:{
           ticketNum:'',
           shopName:'',
@@ -91,9 +97,15 @@
     methods:{
       getEditMes(){
         this.mes={}
+        this.picdisable=''
+        this.disabled=false
         if (this.$route.params.active==undefined){
+          console.log('bianji');
           this.mes = this.$route.params
+          this.disabled = true
+          this.picdisable = 'none'
         } else{
+          console.log('tianjia');
           this.mes={
             ticketNum:'',
             shopName:'',
@@ -110,7 +122,20 @@
       },
       onRead(file) {
         // console.log(file)
-        this.mes.imgbasesrc = file.content;
+        if(file.content.length<=(100 * 1024)){
+          console.log(1)
+          this.mes.imgbasesrc = file.content;
+        }else{
+          console.log(2)
+          let Orientation;
+          let result = file.content;
+          let img = new Image();
+          img.src = result
+          this.mes.imgbasesrc = this.compress(img,Orientation);
+
+          console.log(img)
+        }
+        console.log(this.mes.imgbasesrc)
         // console.log('filesss',file.content.split(',')[1])
       },
       clickAdd(){
@@ -120,7 +145,11 @@
           goodsPrice: ''
         });
       },
-
+      onRemove(index,row){
+        console.log('shanchu',index)
+        console.log(row)
+        this.mes.goodsAll.splice(index,1);
+      },
       submitForm(){
         if(this.ifGoodsAllNull()&& this.ifMesNull()){
           console.log('都填了 可以发送请求')
@@ -176,7 +205,55 @@
           }
         }
         return returnMes;
+      },
+      compress(img,Orientation){
+    let canvas = document.createElement("canvas");
+    let ctx = canvas.getContext('2d');
+    //瓦片canvas
+    let tCanvas = document.createElement("canvas");
+    let tctx = tCanvas.getContext("2d");
+    let initSize = img.src.length;
+    let width = img.width;
+    let height = img.height;
+    //如果图片大于四百万像素，计算压缩比并将大小压至400万以下
+    let ratio;
+    if ((ratio = width * height / 4000000) > 1) {
+      console.log("大于400万像素")
+      ratio = Math.sqrt(ratio);
+      width /= ratio;
+      height /= ratio;
+    } else {
+      ratio = 1;
+    }
+    canvas.width = width;
+    canvas.height = height;
+    //        铺底色
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    //如果图片像素大于100万则使用瓦片绘制
+    let count;
+    if ((count = width * height / 1000000) > 1) {
+      console.log("超过100W像素");
+      count = ~~(Math.sqrt(count) + 1); //计算要分成多少块瓦片
+      //            计算每块瓦片的宽和高
+      let nw = ~~(width / count);
+      let nh = ~~(height / count);
+      tCanvas.width = nw;
+      tCanvas.height = nh;
+      for (let i = 0; i < count; i++) {
+        for (let j = 0; j < count; j++) {
+          tctx.drawImage(img, i * nw * ratio, j * nh * ratio, nw * ratio, nh * ratio, 0, 0, nw, nh);
+          ctx.drawImage(tCanvas, i * nw, j * nh, nw, nh);
+        }
       }
+    } else {
+      ctx.drawImage(img, 0, 0, width, height);
+    }
+    //进行最小压缩
+    let ndata = canvas.toDataURL('image/jpeg', 0.3);
+    tCanvas.width = tCanvas.height = canvas.width = canvas.height = 0;
+    return ndata;
+  }
     },
   }
 </script>
@@ -207,6 +284,15 @@
       .unit{
         display: flex;
         justify-content: space-between;
+        .btnDelete{
+          border-radius: 15px;
+          padding: 2px 5px;
+          background: #ccc;
+          color: #fff;
+          height: 17px;
+          margin-top: 12px;
+          margin-right: 5px;
+        }
       }
     }
   }
