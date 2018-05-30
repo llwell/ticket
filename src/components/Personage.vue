@@ -14,8 +14,8 @@
     <div class="wrap">
       <div class="content">
         <div class="mes">
-          <img :src="mes.headPortrait" alt="">
-          <div class="p">{{mes.name}}</div>
+          <img :src="mes.headimgurl" alt="">
+          <div class="p">{{mes.nickname}}</div>
         </div>
 
         <div class="code">
@@ -33,16 +33,14 @@
   import axios from 'axios'
   import global from "../global/global";
   import { Toast } from 'vant';
-
   export default {
     data() {
       return {
         mes:{
-          headPortrait:'',
-          name:'',
+          headimgurl:'',
+          nickname:'',
           code:''
         }
-
       }
     },
     created() {
@@ -58,15 +56,9 @@
       onRefresh(){
         console.log('刷新二维码');
         var _this = this;
-        axios.get('http://localhost:8080/static/test.json', {
-//              token:"",
-//              method:"",
-//              param:{
-//                  orderId:'asasa'
-//              }
-        })
+        global.Ajax('Ticket/Ticket',global.getToken(),'GetQRCoder',{"token": global.getToken()})
           .then(function (response) {
-            _this.mes.code = response.data.personage.code
+            _this.mes.code = response.data
           })
           .catch(function (error) {
             console.log(error);
@@ -77,19 +69,10 @@
       }
     },
     mounted:function () {
-      console.log("123123",this.$route.params)
+      // console.log("123123",this.$route.params)
       this.getMes()
-      // axios.get(`http://yuki.llwell.net/api/vlist/video/${this.$route.query.ids}/true`).then(response => {
-      //     console.log(response)
-      //     response.data.goods.forEach((item)=>{
-      //       this.playItemList.push(item);
-      //     })
-      //     this.title = response.data.video_title;
-      // });
-      //   console.log(this.video)
     },
   }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

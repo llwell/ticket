@@ -119,6 +119,7 @@
         }
       }else{
         global.setToken(this.$route.query.token);
+        this.getTicketRecord();
       }
     },
     methods: {
@@ -151,32 +152,31 @@
       },
       getPersonage(){
         var _this = this;
-
-        // axios.post('http://ticket.llwell.net/api/ticket/OAuth', {
-        //   token: global.getToken(),
-        //   method: "GetUser",
-        //   param: { token: global.getToken() }
-        //
-        // })
         global.Ajax('Weixin/OAuth',global.getToken(),'GetUser',{"token": global.getToken()})
-          .then(function (responseName) {
-           console.log("~~~",responseName)
-            axios.get('http://localhost:8080/static/test.json', {
-//              token:"",
-//              method:"",
-//              param:{
-//                  orderId:'asasa'
-//              }
-            })
-              .then(function (responseCode) {
-                // console.log({code:responseCode.data.personage.code})
-                let response =  Object.assign(responseName.data.appobj,{code:responseCode.data.personage.code})
-                console.log('send',response)
-                _this.$router.push({name:'Personage',params:response})
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
+          .then(function (response) {
+           // console.log("~~~",responseName)
+            if(response.success) {
+                global.Ajax('Ticket/Ticket',global.getToken(),'GetQRCoder',{"token": global.getToken()})
+                  .then(function (responseCode) {
+                    console.log(responseCode)
+                    if(responseCode.success){
+                      console.log(response.data)
+                      console.log(responseCode.data)
+                      let res =  Object.assign(response.data,{code:responseCode.data})
+                      console.log('send',res)
+                      _this.$router.push({name:'Personage',params:res})
+                    }else{
+                      global.checkApiToken(responseCode.msg.code);
+                      Toast('出错信息：'+responseCode.msg.code+' '+responseCode.msg.msg);
+                    }
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                  });
+              }else{
+              global.checkApiToken(response.msg.code);
+              Toast('出错信息：'+response.msg.code+' '+response.msg.msg);
+            }
           })
           .catch(function (error) {
             console.log(error);
@@ -202,9 +202,6 @@
             console.log('err')
         }
       },
-
-
-
       onEdit(index){
            // console.log(index)
         //请求拿到 所有状态数据
