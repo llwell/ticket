@@ -56,7 +56,7 @@
       onRefresh(){
         console.log('刷新二维码');
         var _this = this;
-        global.Ajax('Ticket/Ticket',global.getToken(),'GetQRCoder',{"token": global.getToken()})
+        global.Ajax('Ticket/Users',global.getToken(),'UpdateQRCoder',{"token": global.getToken()})
           .then(function (response) {
             _this.mes.code = response.data
           })

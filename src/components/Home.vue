@@ -156,7 +156,7 @@
           .then(function (response) {
            // console.log("~~~",responseName)
             if(response.success) {
-                global.Ajax('Ticket/Ticket',global.getToken(),'GetQRCoder',{"token": global.getToken()})
+                global.Ajax('Ticket/Users',global.getToken(),'GetQRCoder',{"token": global.getToken()})
                   .then(function (responseCode) {
                     console.log(responseCode)
                     if(responseCode.success){
