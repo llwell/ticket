@@ -349,7 +349,7 @@
         justify-content: space-between;
         .btnDelete{
           border-radius: 15px;
-          padding: 2px 5px 3px;
+          padding: 1px 5px 5px;
           background: #ccc;
           color: #fff;
           height: 17px;
