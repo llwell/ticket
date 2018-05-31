@@ -56,7 +56,10 @@
       </div>
     </div>
     <!--</van-cell-group>-->
-    <van-button size="large" @click="submitForm" >提交</van-button>
+    <div class="" style="padding: 10px">
+      <van-button size="large" @click="submitForm" >提交</van-button>
+    </div>
+
   </div>
 </template>
 
@@ -346,7 +349,7 @@
         justify-content: space-between;
         .btnDelete{
           border-radius: 15px;
-          padding: 2px 5px;
+          padding: 2px 5px 3px;
           background: #ccc;
           color: #fff;
           height: 17px;
