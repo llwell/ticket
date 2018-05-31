@@ -127,15 +127,25 @@
           // console.log(1)
           this.mes.imgbasesrc = file.content;
         }else{
-          // console.log(2);
+           console.log(2);
           var that = this;
-          this.mes.imgbasesrc = file.content;
-          setTimeout(function(){
-            that.compress(file,0.1,function (results) {
-              that.mes.imgbasesrc = results;
+
+
+          new Promise((resolve, reject)=>{
+            this.mes.imgbasesrc = file.content;
+            setTimeout(function () {
+              resolve();
+            },0)
+            console.log('111')
+          }).then(()=>{
+            console.log('212')
+            var _this = this;
+            this.compress(file,0.1,function (results) {
+              _this.mes.imgbasesrc = results;
             });
-          }, 0);
-          // this.mes.imgbasesrc = file.content;
+          })
+
+
 
 
 
