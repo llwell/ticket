@@ -31,7 +31,7 @@
             <van-icon name="photograph" />
           </van-uploader>
           <div class="pic">
-            <img :src="mes.imgbasesrc" alt="">
+            <img :src="mes.imgbasesrc" alt="" id="ttt">
           </div>
         </div>
       </div>
@@ -121,21 +121,26 @@
         this.$router.push('/')
       },
       onRead(file) {
-        // console.log(file)
+
+        //console.log(file)
         if(file.content.length<=(100 * 1024)){
-          console.log(1)
+          // console.log(1)
           this.mes.imgbasesrc = file.content;
         }else{
-          console.log(2)
-          let Orientation;
-          let result = file.content;
-          let img = new Image();
-          img.src = result
-          this.mes.imgbasesrc = this.compress(img,Orientation);
+          // console.log(2);
+          var that = this;
+          this.mes.imgbasesrc = file.content;
+          setTimeout(function(){
+            that.compress(file,0.1,function (results) {
+              that.mes.imgbasesrc = results;
+            });
+          }, 0);
+          // this.mes.imgbasesrc = file.content;
 
-          console.log(img)
+
+
         }
-        console.log(this.mes.imgbasesrc)
+        //console.log(this.mes.imgbasesrc)
         // console.log('filesss',file.content.split(',')[1])
       },
       clickAdd(){
@@ -146,8 +151,6 @@
         });
       },
       onRemove(index,row){
-        console.log('shanchu',index)
-        console.log(row)
         this.mes.goodsAll.splice(index,1);
       },
       submitForm(){
@@ -206,54 +209,101 @@
         }
         return returnMes;
       },
-      compress(img,Orientation){
-    let canvas = document.createElement("canvas");
-    let ctx = canvas.getContext('2d');
-    //瓦片canvas
-    let tCanvas = document.createElement("canvas");
-    let tctx = tCanvas.getContext("2d");
-    let initSize = img.src.length;
-    let width = img.width;
-    let height = img.height;
-    //如果图片大于四百万像素，计算压缩比并将大小压至400万以下
-    let ratio;
-    if ((ratio = width * height / 4000000) > 1) {
-      console.log("大于400万像素")
-      ratio = Math.sqrt(ratio);
-      width /= ratio;
-      height /= ratio;
-    } else {
-      ratio = 1;
-    }
-    canvas.width = width;
-    canvas.height = height;
-    //        铺底色
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    //如果图片像素大于100万则使用瓦片绘制
-    let count;
-    if ((count = width * height / 1000000) > 1) {
-      console.log("超过100W像素");
-      count = ~~(Math.sqrt(count) + 1); //计算要分成多少块瓦片
-      //            计算每块瓦片的宽和高
-      let nw = ~~(width / count);
-      let nh = ~~(height / count);
-      tCanvas.width = nw;
-      tCanvas.height = nh;
-      for (let i = 0; i < count; i++) {
-        for (let j = 0; j < count; j++) {
-          tctx.drawImage(img, i * nw * ratio, j * nh * ratio, nw * ratio, nh * ratio, 0, 0, nw, nh);
-          ctx.drawImage(tCanvas, i * nw, j * nh, nw, nh);
+      compress(file, quality, callback) {
+        // if (!window.FileReader || !window.Blob) {
+        //   return errorHandler('您的浏览器不支持图片压缩')();
+        // }
+        compressImage();
+        // var reader = new FileReader();
+        // var mimeType = file.type || 'image/jpeg';
+        // reader.onload = createImage;
+        // reader.onerror = errorHandler('图片读取失败！');
+        // reader.readAsDataURL(file);
+
+        // function createImage() {
+        //   var dataURL = this.result;
+        //   var image = new Image();
+        //   image.onload = compressImage;
+        //   image.onerror = errorHandler('图片加载失败');
+        //   image.src = dataURL;
+        // }
+
+        function compressImage() {
+          var canvas = document.createElement('canvas');
+          var ctx;
+          var dataURI;
+          var result;
+
+
+          var myimage = document.getElementById("ttt");
+          if (typeof myimage.naturalWidth == "undefined") {
+// IE 6/7/8
+            var i = new Image();
+            i.src = myimage.src;
+            canvas.width = i.width;
+            canvas.height = i.height;
+          }
+          else {
+// HTML5 browsers
+            canvas.width = myimage.naturalWidth;
+            canvas.height = myimage.naturalHeight;
+          }
+
+
+          ctx = canvas.getContext('2d');
+          // console.log(document.getElementById("ttt").getAttribute("src"));
+          ctx.drawImage(document.getElementById("ttt"), 0, 0);
+          dataURI = canvas.toDataURL(file.type || 'image/jpeg', quality);
+          result = dataURIToBlob(dataURI);
+          var reader = new FileReader();
+          reader.readAsDataURL(result);
+          reader.onload = function () {
+            console.log(this.result);
+            callback(this.result);
+          };
+
+          //callback(null, result);
         }
-      }
-    } else {
-      ctx.drawImage(img, 0, 0, width, height);
-    }
-    //进行最小压缩
-    let ndata = canvas.toDataURL('image/jpeg', 0.3);
-    tCanvas.width = tCanvas.height = canvas.width = canvas.height = 0;
-    return ndata;
-  }
+        // function dataURIToBlob(dataURI) {
+        //   var type = dataURI.match(/data:([^;]+)/)[1];
+        //   var base64 = dataURI.replace(/^[^,]+,/, '');
+        //   var byteString = atob(base64);
+        //   var ia = new Uint8Array(byteString.length);
+        //   for (var i = 0; i < byteString.length; i++) {
+        //     ia[i] = byteString.charCodeAt(i);
+        //   }
+        //   // var blob = getBlob([ia]);
+        //   return new Blob([ia], {type: type});
+        // }
+        function dataURIToBlob(dataURI) {
+          var type = dataURI.match(/data:([^;]+)/)[1];
+          var base64 = dataURI.replace(/^[^,]+,/, '');
+          var byteString = atob(base64);
+          var ia = new Uint8Array(byteString.length);
+          for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+          }
+          var blob;
+          try {
+            blob = new Blob([ia], {type: 'image/jpg'});
+          } catch (e) {
+            window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
+            if(e.name === 'TypeError' && window.BlobBuilder){
+              var blobBuilder = new BlobBuilder();
+              blobBuilder.append(ia);
+              blob = blobBuilder.getBlob('image/jpg');
+            }
+          }
+          return blob
+        }
+        function errorHandler(message) {
+          return function () {
+            var error = new Error('Compression Error:', message);
+            callback(error, null);
+          };
+        }
+      },
+
     },
   }
 </script>
@@ -278,7 +328,7 @@
         /*border: 1px solid red;*/
         height: 220px;
         img{
-          height: 180px;
+          width: 180px;
         }
       }
       .unit{
