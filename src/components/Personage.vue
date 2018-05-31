@@ -7,8 +7,6 @@
         left-arrow
         @click-left="onClickLeft"
 
-        right-text="我就是按钮"
-        @click-right="onClickRight"
       />
     </div>
     <div class="wrap">
@@ -17,9 +15,8 @@
           <img :src="mes.headimgurl" alt="">
           <div class="p">{{mes.nickname}}</div>
         </div>
-
-        <div class="code">
-          <img :src="mes.code" alt="">
+        <div class="code" ref="qrcode" id="qrcode" v-if="mes.qrcode">
+          <!--<img :src="mes.code" alt="" >-->
         </div>
         <div class="refresh" @click="onRefresh">
           点我更新二维码
@@ -30,6 +27,7 @@
 </template>
 
 <script>
+  import QRCode from 'qrcodejs2'
   import axios from 'axios'
   import global from "../global/global";
   import { Toast } from 'vant';
@@ -39,7 +37,9 @@
         mes:{
           headimgurl:'',
           nickname:'',
-          code:''
+          code:'',
+          content:'',
+          qrcode:true
         }
       }
     },
@@ -58,7 +58,32 @@
         var _this = this;
         global.Ajax('Ticket/Users',global.getToken(),'UpdateQRCoder',{"token": global.getToken()})
           .then(function (response) {
-            _this.mes.code = response.data.url
+            _this.mes.qrcode=false
+            console.log(_this.mes)
+            setTimeout(function () {
+              _this.mes.qrcode=true
+              setTimeout(function () {
+                _this.qrcode('这里是更新二维码');
+              },0)
+            },0)
+
+            // _this.mes.code = response.data.url
+            // _this.$nextTick (function () {
+              // _this.qrcode('caicaiciaicai');
+              // qrcode.clear();
+            // var childList = document.getElementById('qrcode').childNodes;
+            // console.log(childList)
+            // if (childList.length>=1){
+            //   for (let i = 0;i <= childList.length; i ++) {
+            //     document.getElementById('qrcode').removeChild(childList[i]);
+            //     console.log(childList)
+            //   }
+            //   _this.qrcode('new content');
+            // }
+            // childList.length =1;
+
+            // })
+
           })
           .catch(function (error) {
             console.log(error);
@@ -66,11 +91,25 @@
       },
       getMes(){
         this.mes =this.$route.params
-      }
+      },
+      qrcode (content) {
+        let qrcode = new QRCode('qrcode', {
+          width: 215,
+          height: 215, // 高度
+          text: content // 二维码内容
+          // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+          // background: '#f0f'
+          // foreground: '#ff0'
+        })
+        console.log('[[po',qrcode)
+      },
     },
     mounted:function () {
-      // console.log("123123",this.$route.params)
-      this.getMes()
+      // console.log("mounted",this.$route.params)
+      this.getMes();
+      this.$nextTick (function () {
+        this.qrcode(this.$route.params.content);
+      })
     },
   }
 </script>

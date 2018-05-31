@@ -52,6 +52,9 @@
         </van-tab>
       </van-tabs>
     </div>
+
+
+
     <div class="bottom">
       <van-tabbar v-model="activeBottom" @change="ticketIn">
         <van-tabbar-item icon="completed">票务状态</van-tabbar-item>
@@ -64,7 +67,8 @@
   </div>
 </template>
 <script>
-
+  import QRCode from 'qrcodejs2'
+  // components: {QRCode}
   import axios from 'axios'
   import global from '../global/global'
   import { Toast } from 'vant';
@@ -150,7 +154,20 @@
             console.log(error);
           });
       },
+
+      qrcode (content) {
+        let qrcode = new QRCode('qrcode', {
+          width: 260,
+          height: 260, // 高度
+          text: content // 二维码内容
+          // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+          // background: '#f0f'
+          // foreground: '#ff0'
+        })
+        console.log('[[po',qrcode)
+      },
       getPersonage(){
+
         var _this = this;
         global.Ajax('Weixin/OAuth',global.getToken(),'GetUser',{"token": global.getToken()})
           .then(function (response) {
@@ -158,11 +175,11 @@
             if(response.success) {
                 global.Ajax('Ticket/Users',global.getToken(),'GetQRCoder',{"token": global.getToken()})
                   .then(function (responseCode) {
-                    console.log(responseCode)
+                    // console.log(responseCode)
                     if(responseCode.success){
-                      console.log(response.data)
-                      console.log(responseCode.data)
-                      let res =  Object.assign(response.data,{code:responseCode.data.url})
+                      // console.log(response.data)
+                      // console.log(responseCode.data)
+                      let res =  Object.assign(response.data,{content:'二维码哟',qrcode:true})
                       console.log('send',res)
                       _this.$router.push({name:'Personage',params:res})
                     }else{
