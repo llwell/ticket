@@ -72,6 +72,7 @@
     name: 'HelloWorld',
     data () {
       return {
+        clickTIme:'',
         disabled:false,
         picdisable:'',
         mes:{
@@ -89,7 +90,7 @@
     },
     mounted:function () {
       console.log(this.$route.params)
-        this.getEditMes();
+      this.getEditMes();
 //      console.log('~~~')
 //      console.log(this.$route.params)
       // axios.get(`http://yuki.llwell.net/api/vlist/item/${this.$route.query.ids}/false`).then(response => {
@@ -131,7 +132,7 @@
           // console.log(1)
           this.mes.imgbasesrc = file.content;
         }else{
-           console.log(2);
+          console.log(2);
           var that = this;
 
 
@@ -144,7 +145,7 @@
           }).then(()=>{
             // console.log('212')
             var _this = this;
-            this.compress(file,0.2,function (results) {
+            this.compress(file,0.5,function (results) {
               _this.mes.imgbasesrc = results;
             });
           })
@@ -175,12 +176,22 @@
           //  json 格式内 Home等外层名称，只作为页面所需接口存放的容器，并非接口字段
           var _this = this;
           let params = {
-                        ...this.mes,
-                        'token':global.getToken(),
-                        'state':this.$route.params.state?this.$route.params.state:'',
+            ...this.mes,
+            'token':global.getToken(),
+            'state':this.$route.params.state?this.$route.params.state:'',
 
-                      }
-                      console.log('==',params)
+          }
+          // console.log('==',params)
+          var nowTime = new Date().getTime();
+          
+          if(this.clickTIme !='' && (newTime-this.clickTIme<1000)){
+            Toast('提交过于频繁，请稍后再试')
+          }else{
+            this.clickTIme = nowTime;
+          }
+
+
+
           global.Ajax('Ticket/Ticket',global.getToken(),'InsertTicket',params)
             .then(function (response) {
               if(response.success) {
@@ -248,49 +259,20 @@
           var ctx;
           var dataURI;
           var result;
-          var rotateshow;
-          var newFIles;
-          var fileType = file.type || 'image/jpeg';
-          var img = document.getElementById("ttt");
-          EXIF.getData(img, function(){
-            console.log('s',EXIF)
-            EXIF.getAllTags(img);
-            console.log('~~~ss',EXIF.getAllTags(img))
-            console.log('~~',EXIF.getTag(img,'Orientation'))
-            var Orientation = EXIF.getTag(img,'Orientation');
-            switch (Orientation){
-              case 6:
-                rotateshow = rotateImg(img,'left',canvas,fileType);
-                break;
-              case 8:
-                rotateshow = rotateImg(img,'right',canvas,fileType);
-                break;
-              case 3:
-                rotateImg(img,'right',canvas,fileType);
-                rotateshow = rotateImg(img,'right',canvas,fileType);
-                break;
-              default:
-                rotateshow = img.src;
-            }
-            newFIles = rotateshow
-            console.log(rotateshow);
-          });
 
-
-
-//           var myimage = document.getElementById("ttt");
-//           if (typeof myimage.naturalWidth == "undefined") {
-// // IE 6/7/8
-//             var i = new Image();
-//             i.src = myimage.src;
-//             canvas.width = i.width;
-//             canvas.height = i.height;
-//           }
-//           else {
-// // HTML5 browsers
-//             canvas.width = myimage.naturalWidth;
-//             canvas.height = myimage.naturalHeight;
-//           }
+          var myimage = document.getElementById("ttt");
+          if (typeof myimage.naturalWidth == "undefined") {
+// IE 6/7/8
+            var i = new Image();
+            i.src = myimage.src;
+            canvas.width = i.width;
+            canvas.height = i.height;
+          }
+          else {
+// HTML5 browsers
+            canvas.width = myimage.naturalWidth;
+            canvas.height = myimage.naturalHeight;
+          }
 
 
           ctx = canvas.getContext('2d');
@@ -318,72 +300,6 @@
         //   // var blob = getBlob([ia]);
         //   return new Blob([ia], {type: type});
         // }
-        function rotateImg(img, direction,canvas,fileType) {
-          var min_step = 0;
-          var max_step = 3;
-          //var img = document.getElementById(pid);
-          if (img == null)return;
-          //img的高度和宽度不能在img元素隐藏后获取，否则会出错
-          var height = img.naturalHeight;
-          var width = img.naturalWidth;
-          // canvas.width = myimage.naturalWidth;
-          //   canvas.height = myimage.naturalHeight;
-
-          //var step = img.getAttribute('step');
-          var step = 2;
-          if (step == null) {
-            step = min_step;
-          }
-          if (direction == 'right') {
-            step++;
-            //旋转到原位置，即超过最大值
-            step > max_step && (step = min_step);
-          } else {
-            step--;
-            step < min_step && (step = max_step);
-          }
-          var degree = step * 90 * Math.PI / 180;
-          var ctx = canvas.getContext('2d');
-          switch (step) {
-            case 0:
-              console.log('d')
-              canvas.width = width;
-              canvas.height = height;
-              ctx.drawImage(img, 0, 0);
-              break;
-            case 1:
-              console.log('a')
-              canvas.width = height;
-              canvas.height = width;
-              ctx.rotate(degree);
-              ctx.drawImage(img, 0, -height);
-              break;
-            case 2:
-              console.log('b')
-              canvas.width = width;
-              canvas.height = height;
-              ctx.rotate(degree);
-              ctx.drawImage(img, -width, -height);
-              break;
-            case 3:
-              console.log('c')
-              canvas.width = height;
-              canvas.height = width;
-              ctx.rotate(degree);
-              ctx.drawImage(img, -width, 0);
-              break;
-          }
-
-          dataURI = canvas.toDataURL(fileType || 'image/jpeg', quality);
-          result = dataURIToBlob(dataURI);
-          var reader = new FileReader();
-          reader.readAsDataURL(result);
-          reader.onload = function () {
-            console.log(this.result);
-            callback(this.result);
-          };
-
-        }
         function dataURIToBlob(dataURI) {
           var type = dataURI.match(/data:([^;]+)/)[1];
           var base64 = dataURI.replace(/^[^,]+,/, '');
@@ -405,12 +321,7 @@
           }
           return blob
         }
-        function errorHandler(message) {
-          return function () {
-            var error = new Error('Compression Error:', message);
-            callback(error, null);
-          };
-        }
+
       },
 
     },
