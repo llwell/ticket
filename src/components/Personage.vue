@@ -58,14 +58,20 @@
         var _this = this;
         global.Ajax('Ticket/Users',global.getToken(),'UpdateQRCoder',{"token": global.getToken()})
           .then(function (response) {
-            _this.mes.qrcode=false
-            // console.log(_this.mes)
-            setTimeout(function () {
-              _this.mes.qrcode=true
+            if(response.success){
+              _this.mes.qrcode=false
+              // console.log(_this.mes)
               setTimeout(function () {
-                _this.qrcode(response.data.url);
+                _this.mes.qrcode=true
+                setTimeout(function () {
+                  _this.qrcode(response.data.url);
+                },0)
               },0)
-            },0)
+            }else{
+              global.checkApiToken(response.msg.code);
+              global.showFailToast(response)
+            }
+
 
             // _this.mes.code = response.data.url
             // _this.$nextTick (function () {

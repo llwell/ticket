@@ -147,7 +147,8 @@
               _this.tabPaneThreeData = response.data.tabPaneThreeData;
             }else{
               global.checkApiToken(response.msg.code);
-              Toast('出错信息：'+response.msg.code+' '+response.msg.msg);
+              global.showFailToast(response)
+              // Toast('出错信息：'+response.msg.code+' '+response.msg.msg);
             }
           })
           .catch(function (error) {
@@ -167,7 +168,6 @@
         console.log('[[po',qrcode)
       },
       getPersonage(){
-
         var _this = this;
         global.Ajax('Weixin/OAuth',global.getToken(),'GetUser',{"token": global.getToken()})
           .then(function (response) {
@@ -184,7 +184,8 @@
                       _this.$router.push({name:'Personage',params:res})
                     }else{
                       global.checkApiToken(responseCode.msg.code);
-                      Toast('出错信息：'+responseCode.msg.code+' '+responseCode.msg.msg);
+                      global.showFailToast(responseCode);
+                      // Toast('出错信息：'+responseCode.msg.code+' '+responseCode.msg.msg);
                     }
                   })
                   .catch(function (error) {
@@ -192,7 +193,8 @@
                   });
               }else{
               global.checkApiToken(response.msg.code);
-              Toast('出错信息：'+response.msg.code+' '+response.msg.msg);
+              global.showFailToast(response);
+              // Toast('出错信息：'+response.msg.code+' '+response.msg.msg);
             }
           })
           .catch(function (error) {
@@ -240,7 +242,8 @@
               // console.log(res)
             }else{
               global.checkApiToken(response.msg.code);
-              Toast('出错信息：'+response.msg.code+' '+response.msg.msg);
+              global.showFailToast(response)
+              // Toast('出错信息：'+response.msg.code+' '+response.msg.msg);
             }
           })
           .catch(function (error) {
@@ -251,7 +254,7 @@
         var _this = this;
         let params = {
           "token": global.getToken(),
-          "ticketNum":index.ticketNum,
+          // "ticketNum":index.ticketNum,
           "state":index.state
         }
         global.Ajax('Ticket/Ticket',global.getToken(),'DelTicket',params)
@@ -260,7 +263,8 @@
               _this.getTicketRecord()
             }else{
               global.checkApiToken(response.msg.code);
-              Toast('出错信息：'+response.msg.code+' '+response.msg.msg);
+              global.showFailToast(response)
+              // Toast('出错信息：'+response.msg.code+' '+response.msg.msg);
             }
           })
           .catch(function (error) {

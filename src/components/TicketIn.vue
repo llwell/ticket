@@ -103,12 +103,12 @@
         this.picdisable=''
         this.disabled=false
         if (this.$route.params.active==undefined){
-          console.log('bianji');
+          // console.log('bianji');
           this.mes = this.$route.params
           this.disabled = true
           this.picdisable = 'none'
         } else{
-          console.log('tianjia');
+          // console.log('tianjia');
           this.mes={
             ticketNum:'',
             shopName:'',
@@ -139,9 +139,9 @@
             setTimeout(function () {
               resolve();
             },0)
-            console.log('111')
+            // console.log('111')
           }).then(()=>{
-            console.log('212')
+            // console.log('212')
             var _this = this;
             this.compress(file,0.1,function (results) {
               _this.mes.imgbasesrc = results;
@@ -188,7 +188,8 @@
                 _this.$router.push('/')
               }else{
                 global.checkApiToken(response.msg.code);
-                Toast('出错信息：'+response.msg.code+' '+response.msg.msg);
+                global.showFailToast(response)
+                // Toast('出错信息：'+response.msg.code+' '+response.msg.msg);
               }
 
             })
@@ -339,7 +340,7 @@
       margin-top: 50px;
       .t_upload{
         /*border: 1px solid red;*/
-        height: 220px;
+        min-height: 220px;
         img{
           width: 180px;
         }
