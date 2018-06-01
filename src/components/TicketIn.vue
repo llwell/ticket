@@ -236,23 +236,9 @@
         return returnMes;
       },
       compress(file, quality, callback) {
-        // if (!window.FileReader || !window.Blob) {
-        //   return errorHandler('您的浏览器不支持图片压缩')();
-        // }
-        compressImage();
-        // var reader = new FileReader();
-        // var mimeType = file.type || 'image/jpeg';
-        // reader.onload = createImage;
-        // reader.onerror = errorHandler('图片读取失败！');
-        // reader.readAsDataURL(file);
 
-        // function createImage() {
-        //   var dataURL = this.result;
-        //   var image = new Image();
-        //   image.onload = compressImage;
-        //   image.onerror = errorHandler('图片加载失败');
-        //   image.src = dataURL;
-        // }
+        compressImage();
+        
 
         function compressImage() {
           var canvas = document.createElement('canvas');
@@ -281,10 +267,10 @@
             canvas.height = myimage.naturalHeight;
           }
           console.log(Orientation);
-          Toast('这里是Orientation'+Orientation)
+          // Toast('这里是Orientation'+Orientation)
           switch (Orientation){
             case 6:
-              Toast('这里是6')
+              // Toast('这里是6')
               ctx = canvas.getContext('2d');
               canvas.height = myimage.naturalWidth;
               canvas.width = myimage.naturalHeight;
@@ -292,7 +278,7 @@
               ctx.drawImage(document.getElementById("ttt"), 0, -myimage.naturalHeight);
               break;
             case 8:
-              Toast('这里是8')
+              // Toast('这里是8')
               ctx = canvas.getContext('2d');
               canvas.height = myimage.naturalWidth;
               canvas.width = myimage.naturalHeight;
@@ -300,7 +286,7 @@
               ctx.drawImage(document.getElementById("ttt"), -myimage.naturalWidth, 0);
               break;
             case 3:
-              Toast('这里是3')
+              // Toast('这里是3')
               ctx = canvas.getContext('2d');
               canvas.width = myimage.naturalWidth;
               canvas.height = myimage.naturalHeight;
@@ -308,7 +294,7 @@
               ctx.drawImage(document.getElementById("ttt"), -myimage.naturalWidth, -myimage.naturalHeight);
               break;
             default:
-              Toast('这里是default')
+              // Toast('这里是default')
               ctx = canvas.getContext('2d');
               canvas.width = myimage.naturalWidth;
               canvas.height = myimage.naturalHeight;
@@ -328,17 +314,7 @@
           });
           //callback(null, result);
         }
-        // function dataURIToBlob(dataURI) {
-        //   var type = dataURI.match(/data:([^;]+)/)[1];
-        //   var base64 = dataURI.replace(/^[^,]+,/, '');
-        //   var byteString = atob(base64);
-        //   var ia = new Uint8Array(byteString.length);
-        //   for (var i = 0; i < byteString.length; i++) {
-        //     ia[i] = byteString.charCodeAt(i);
-        //   }
-        //   // var blob = getBlob([ia]);
-        //   return new Blob([ia], {type: type});
-        // }
+
         function dataURIToBlob(dataURI) {
           var type = dataURI.match(/data:([^;]+)/)[1];
           var base64 = dataURI.replace(/^[^,]+,/, '');
