@@ -50,20 +50,20 @@
         this.$router.push('/')
       },
       onClickRight() {
-        console.log('按钮在这里')
+        // console.log('按钮在这里')
         this.$router.push('/test')
       },
       onRefresh(){
-        console.log('刷新二维码');
+        // console.log('刷新二维码');
         var _this = this;
         global.Ajax('Ticket/Users',global.getToken(),'UpdateQRCoder',{"token": global.getToken()})
           .then(function (response) {
             _this.mes.qrcode=false
-            console.log(_this.mes)
+            // console.log(_this.mes)
             setTimeout(function () {
               _this.mes.qrcode=true
               setTimeout(function () {
-                _this.qrcode('这里是更新二维码');
+                _this.qrcode(response.data.url);
               },0)
             },0)
 

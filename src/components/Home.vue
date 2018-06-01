@@ -177,10 +177,10 @@
                   .then(function (responseCode) {
                     // console.log(responseCode)
                     if(responseCode.success){
-                      // console.log(response.data)
+                      // console.log(responseCode)
                       // console.log(responseCode.data)
-                      let res =  Object.assign(response.data,{content:'二维码哟',qrcode:true})
-                      console.log('send',res)
+                      let res =  Object.assign(response.data,{content:responseCode.data.url,qrcode:true})
+                      // console.log('send',res)
                       _this.$router.push({name:'Personage',params:res})
                     }else{
                       global.checkApiToken(responseCode.msg.code);
