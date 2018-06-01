@@ -281,8 +281,10 @@
             canvas.height = myimage.naturalHeight;
           }
           console.log(Orientation);
+          Toast('这里是Orientation'+Orientation)
           switch (Orientation){
             case 6:
+              Toast('这里是6')
               ctx = canvas.getContext('2d');
               canvas.height = myimage.naturalWidth;
               canvas.width = myimage.naturalHeight;
@@ -290,6 +292,7 @@
               ctx.drawImage(document.getElementById("ttt"), 0, -myimage.naturalHeight);
               break;
             case 8:
+              Toast('这里是8')
               ctx = canvas.getContext('2d');
               canvas.height = myimage.naturalWidth;
               canvas.width = myimage.naturalHeight;
@@ -297,6 +300,7 @@
               ctx.drawImage(document.getElementById("ttt"), -myimage.naturalWidth, 0);
               break;
             case 3:
+              Toast('这里是3')
               ctx = canvas.getContext('2d');
               canvas.width = myimage.naturalWidth;
               canvas.height = myimage.naturalHeight;
@@ -304,6 +308,7 @@
               ctx.drawImage(document.getElementById("ttt"), -myimage.naturalWidth, -myimage.naturalHeight);
               break;
             default:
+              Toast('这里是default')
               ctx = canvas.getContext('2d');
               canvas.width = myimage.naturalWidth;
               canvas.height = myimage.naturalHeight;
