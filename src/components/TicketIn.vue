@@ -64,6 +64,7 @@
 </template>
 
 <script>
+  import EXIF from  'exif-js';
   import { Toast } from 'vant';
   import axios from 'axios'
   import global from '../global/global'
@@ -143,7 +144,7 @@
           }).then(()=>{
             // console.log('212')
             var _this = this;
-            this.compress(file,0.1,function (results) {
+            this.compress(file,0.5,function (results) {
               _this.mes.imgbasesrc = results;
             });
           })
@@ -247,6 +248,31 @@
           var ctx;
           var dataURI;
           var result;
+          var rotateshow;
+          var img = document.getElementById("ttt");
+          EXIF.getData(img, function(){
+            console.log('s',EXIF)
+            EXIF.getAllTags(img);
+            console.log('~~~ss',EXIF.getAllTags(img))
+            console.log('~~',EXIF.getTag(img,'Orientation'))
+            var Orientation = EXIF.getTag(img,'Orientation');
+            switch (Orientation){
+              case 6:
+                rotateshow = rotateImg(img,'left',canvas,fileType);
+                break;
+              case 8:
+                rotateshow = rotateImg(img,'right',canvas,fileType);
+                break;
+              case 3:
+                rotateImg(img,'right',canvas,fileType);
+                rotateshow = rotateImg(img,'right',canvas,fileType);
+                break;
+              default:
+                rotateshow = img.src;
+            }
+            console.log(rotateshow);
+          });
+
 
 
           var myimage = document.getElementById("ttt");
@@ -289,6 +315,56 @@
         //   // var blob = getBlob([ia]);
         //   return new Blob([ia], {type: type});
         // }
+        function rotateImg(img, direction,canvas,fileType) {
+          var min_step = 0;
+          var max_step = 3;
+          //var img = document.getElementById(pid);
+          if (img == null)return;
+          //img的高度和宽度不能在img元素隐藏后获取，否则会出错
+          var height = img.height;
+          var width = img.width;
+          //var step = img.getAttribute('step');
+          var step = 2;
+          if (step == null) {
+            step = min_step;
+          }
+          if (direction == 'right') {
+            step++;
+            //旋转到原位置，即超过最大值
+            step > max_step && (step = min_step);
+          } else {
+            step--;
+            step < min_step && (step = max_step);
+          }
+          var degree = step * 90 * Math.PI / 180;
+          var ctx = canvas.getContext('2d');
+          switch (step) {
+            case 0:
+              canvas.width = width;
+              canvas.height = height;
+              ctx.drawImage(img, 0, 0);
+              break;
+            case 1:
+              canvas.width = height;
+              canvas.height = width;
+              ctx.rotate(degree);
+              ctx.drawImage(img, 0, -height);
+              break;
+            case 2:
+              canvas.width = width;
+              canvas.height = height;
+              ctx.rotate(degree);
+              ctx.drawImage(img, -width, -height);
+              break;
+            case 3:
+              canvas.width = height;
+              canvas.height = width;
+              ctx.rotate(degree);
+              ctx.drawImage(img, -width, 0);
+              break;
+          }
+          return canvas.toDataURL(fileType,0.75);
+        }
         function dataURIToBlob(dataURI) {
           var type = dataURI.match(/data:([^;]+)/)[1];
           var base64 = dataURI.replace(/^[^,]+,/, '');
