@@ -265,7 +265,7 @@
           var Orientation;
           EXIF.getData(myimage, function() {
             Orientation = EXIF.getTag(myimage, 'Orientation');
-          });
+
 
 
             if (typeof myimage.naturalWidth == "undefined") {
@@ -325,7 +325,7 @@
             //console.log(this.result);
             callback(this.result);
           };
-
+          });
           //callback(null, result);
         }
         // function dataURIToBlob(dataURI) {
