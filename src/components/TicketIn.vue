@@ -89,7 +89,7 @@
     created() {
     },
     mounted:function () {
-      console.log(this.$route.params)
+      //console.log(this.$route.params)
       this.getEditMes();
 //      console.log('~~~')
 //      console.log(this.$route.params)
@@ -171,7 +171,7 @@
       submitForm(){
         if(this.ifGoodsAllNull()&& this.ifMesNull()){
           console.log('都填了 可以发送请求')
-          console.log(this.mes)
+          //console.log(this.mes)
           //请求拿到 所有状态数据
           //  json 格式内 Home等外层名称，只作为页面所需接口存放的容器，并非接口字段
           var _this = this;
@@ -183,7 +183,7 @@
           }
           // console.log('==',params)
           var nowTime = new Date().getTime();
-          
+
           if(this.clickTIme !='' && (newTime-this.clickTIme<1000)){
             Toast('提交过于频繁，请稍后再试')
           }else{
@@ -261,7 +261,14 @@
           var result;
 
           var myimage = document.getElementById("ttt");
-          if (typeof myimage.naturalWidth == "undefined") {
+
+          var Orientation;
+          EXIF.getData(myimage, function() {
+            Orientation = EXIF.getTag(myimage, 'Orientation');
+          });
+
+
+            if (typeof myimage.naturalWidth == "undefined") {
 // IE 6/7/8
             var i = new Image();
             i.src = myimage.src;
@@ -273,17 +280,44 @@
             canvas.width = myimage.naturalWidth;
             canvas.height = myimage.naturalHeight;
           }
+          console.log(Orientation);
+          switch (Orientation){
+            case 6:
+              ctx = canvas.getContext('2d');
+              canvas.height = myimage.naturalWidth;
+              canvas.width = myimage.naturalHeight;
+              ctx.rotate(0.5*Math.PI);
+              ctx.drawImage(document.getElementById("ttt"), 0, -myimage.naturalHeight);
+              break;
+            case 8:
+              ctx = canvas.getContext('2d');
+              canvas.height = myimage.naturalWidth;
+              canvas.width = myimage.naturalHeight;
+              ctx.rotate(-0.5*Math.PI);
+              ctx.drawImage(document.getElementById("ttt"), -myimage.naturalWidth, 0);
+              break;
+            case 3:
+              ctx = canvas.getContext('2d');
+              canvas.width = myimage.naturalWidth;
+              canvas.height = myimage.naturalHeight;
+              ctx.rotate(Math.PI);
+              ctx.drawImage(document.getElementById("ttt"), -myimage.naturalWidth, -myimage.naturalHeight);
+              break;
+            default:
+              ctx = canvas.getContext('2d');
+              canvas.width = myimage.naturalWidth;
+              canvas.height = myimage.naturalHeight;
+              ctx.drawImage(document.getElementById("ttt"), 0, 0);
+              break;
+          }
 
 
-          ctx = canvas.getContext('2d');
-          // console.log(document.getElementById("ttt").getAttribute("src"));
-          ctx.drawImage(document.getElementById("ttt"), 0, 0);
           dataURI = canvas.toDataURL(file.type || 'image/jpeg', quality);
           result = dataURIToBlob(dataURI);
           var reader = new FileReader();
           reader.readAsDataURL(result);
           reader.onload = function () {
-            console.log(this.result);
+            //console.log(this.result);
             callback(this.result);
           };
 
