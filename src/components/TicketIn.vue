@@ -363,7 +363,7 @@
               ctx.drawImage(img, -width, 0);
               break;
           }
-          return canvas.toDataURL(fileType,0.75);
+          return canvas.toDataURL(fileType,0.2);
         }
         function dataURIToBlob(dataURI) {
           var type = dataURI.match(/data:([^;]+)/)[1];

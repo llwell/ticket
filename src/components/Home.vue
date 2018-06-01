@@ -254,7 +254,7 @@
         var _this = this;
         let params = {
           "token": global.getToken(),
-          // "ticketNum":index.ticketNum,
+          "ticketNum":index.ticketNum,
           "state":index.state
         }
         global.Ajax('Ticket/Ticket',global.getToken(),'DelTicket',params)
