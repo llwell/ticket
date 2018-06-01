@@ -144,7 +144,7 @@
           }).then(()=>{
             // console.log('212')
             var _this = this;
-            this.compress(file,0.5,function (results) {
+            this.compress(file,0.2,function (results) {
               _this.mes.imgbasesrc = results;
             });
           })
@@ -249,6 +249,8 @@
           var dataURI;
           var result;
           var rotateshow;
+          var newFIles;
+          var fileType = file.type || 'image/jpeg';
           var img = document.getElementById("ttt");
           EXIF.getData(img, function(){
             console.log('s',EXIF)
@@ -270,24 +272,25 @@
               default:
                 rotateshow = img.src;
             }
+            newFIles = rotateshow
             console.log(rotateshow);
           });
 
 
 
-          var myimage = document.getElementById("ttt");
-          if (typeof myimage.naturalWidth == "undefined") {
-// IE 6/7/8
-            var i = new Image();
-            i.src = myimage.src;
-            canvas.width = i.width;
-            canvas.height = i.height;
-          }
-          else {
-// HTML5 browsers
-            canvas.width = myimage.naturalWidth;
-            canvas.height = myimage.naturalHeight;
-          }
+//           var myimage = document.getElementById("ttt");
+//           if (typeof myimage.naturalWidth == "undefined") {
+// // IE 6/7/8
+//             var i = new Image();
+//             i.src = myimage.src;
+//             canvas.width = i.width;
+//             canvas.height = i.height;
+//           }
+//           else {
+// // HTML5 browsers
+//             canvas.width = myimage.naturalWidth;
+//             canvas.height = myimage.naturalHeight;
+//           }
 
 
           ctx = canvas.getContext('2d');
@@ -321,8 +324,11 @@
           //var img = document.getElementById(pid);
           if (img == null)return;
           //img的高度和宽度不能在img元素隐藏后获取，否则会出错
-          var height = img.height;
-          var width = img.width;
+          var height = img.naturalHeight;
+          var width = img.naturalWidth;
+          // canvas.width = myimage.naturalWidth;
+          //   canvas.height = myimage.naturalHeight;
+
           //var step = img.getAttribute('step');
           var step = 2;
           if (step == null) {
@@ -340,30 +346,43 @@
           var ctx = canvas.getContext('2d');
           switch (step) {
             case 0:
+              console.log('d')
               canvas.width = width;
               canvas.height = height;
               ctx.drawImage(img, 0, 0);
               break;
             case 1:
+              console.log('a')
               canvas.width = height;
               canvas.height = width;
               ctx.rotate(degree);
               ctx.drawImage(img, 0, -height);
               break;
             case 2:
+              console.log('b')
               canvas.width = width;
               canvas.height = height;
               ctx.rotate(degree);
               ctx.drawImage(img, -width, -height);
               break;
             case 3:
+              console.log('c')
               canvas.width = height;
               canvas.height = width;
               ctx.rotate(degree);
               ctx.drawImage(img, -width, 0);
               break;
           }
-          return canvas.toDataURL(fileType,0.2);
+
+          dataURI = canvas.toDataURL(fileType || 'image/jpeg', quality);
+          result = dataURIToBlob(dataURI);
+          var reader = new FileReader();
+          reader.readAsDataURL(result);
+          reader.onload = function () {
+            console.log(this.result);
+            callback(this.result);
+          };
+
         }
         function dataURIToBlob(dataURI) {
           var type = dataURI.match(/data:([^;]+)/)[1];
