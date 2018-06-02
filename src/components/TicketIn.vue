@@ -128,7 +128,7 @@
       },
       onRead(file) {
         var sd = document.getElementById("ttt");
-        sd.exifdata = null;
+        sd.exifdata = undefined;
         //console.log(file)
         if(file.content.length<=(100 * 1024)){
           // console.log(1)
@@ -250,10 +250,11 @@
           var result;
 
           var myimage = document.getElementById("ttt");
+          //console.log(myimage.exifdata);
 
           EXIF.getData(myimage, function() {
             that.Orientation = EXIF.getTag(this, 'Orientation');
-            console.log(EXIF.getAllTags(this));
+            //console.log(EXIF.getAllTags(this));
 
 
             if (typeof myimage.naturalWidth == "undefined") {
@@ -277,7 +278,7 @@
               canvas.height = myimage.naturalWidth;
               canvas.width = myimage.naturalHeight;
               ctx.rotate(0.5*Math.PI);
-              ctx.drawImage(document.getElementById("ttt"), 0, -myimage.naturalHeight);
+              ctx.drawImage(myimage, 0, -myimage.naturalHeight);
               break;
             case 8:
               // Toast('这里是8')
@@ -285,7 +286,7 @@
               canvas.height = myimage.naturalWidth;
               canvas.width = myimage.naturalHeight;
               ctx.rotate(-0.5*Math.PI);
-              ctx.drawImage(document.getElementById("ttt"), -myimage.naturalWidth, 0);
+              ctx.drawImage(myimage, -myimage.naturalWidth, 0);
               break;
             case 3:
               // Toast('这里是3')
@@ -293,14 +294,14 @@
               canvas.width = myimage.naturalWidth;
               canvas.height = myimage.naturalHeight;
               ctx.rotate(Math.PI);
-              ctx.drawImage(document.getElementById("ttt"), -myimage.naturalWidth, -myimage.naturalHeight);
+              ctx.drawImage(myimage, -myimage.naturalWidth, -myimage.naturalHeight);
               break;
             default:
               // Toast('这里是default')
               ctx = canvas.getContext('2d');
               canvas.width = myimage.naturalWidth;
               canvas.height = myimage.naturalHeight;
-              ctx.drawImage(document.getElementById("ttt"), 0, 0);
+              ctx.drawImage(myimage, 0, 0);
               break;
           }
 
