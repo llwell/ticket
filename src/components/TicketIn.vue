@@ -239,22 +239,20 @@
 
       compress(file, quality, callback) {
         var that = this;
-        compressImage();
-
-
-        function compressImage() {
+        // compressImage();
+        //
+        //
+        // function compressImage() {
           var canvas = document.createElement('canvas');
           var ctx;
           var dataURI;
           var result;
 
           var myimage = document.getElementById("ttt");
-
-
+          myimage.exifdata = null;
           EXIF.getData(myimage, function() {
-            that.Orientation = EXIF.getTag(myimage, 'Orientation');
+            that.Orientation = EXIF.getTag(this, 'Orientation');
             console.log(EXIF.getAllTags(this));
-            console.log(EXIF.getTag(this, 'Orientation'));
 
 
             if (typeof myimage.naturalWidth == "undefined") {
@@ -316,7 +314,7 @@
           };
           });
           //callback(null, result);
-        }
+        // }
 
         function dataURIToBlob(dataURI) {
           var type = dataURI.match(/data:([^;]+)/)[1];
