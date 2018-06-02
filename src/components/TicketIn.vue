@@ -127,8 +127,8 @@
         this.$router.push('/')
       },
       onRead(file) {
-        // var sd = document.getElementById("ttt");
-        // sd.exifdata = undefined;
+        var sd = document.getElementById("ttt");
+        sd.exifdata = undefined;
         //console.log(file)
         if(file.content.length<=(100 * 1024)){
           // console.log(1)
@@ -307,15 +307,15 @@
 
 
           dataURI = canvas.toDataURL(file.type || 'image/jpeg', quality);
-          // result = dataURIToBlob(file.type || 'image/jpeg', dataURI);
-          // var reader = new FileReader();
-          // reader.readAsDataURL(result);
-          // reader.onload = function () {
-          //   //console.log(this.result);
-          //   callback(this.result);
-          // };
+          result = dataURIToBlob(file.type || 'image/jpeg', dataURI);
+          var reader = new FileReader();
+          reader.readAsDataURL(result);
+          reader.onload = function () {
+            //console.log(this.result);
+            callback(this.result);
+          };
 
-            callback(dataURI);
+            // callback(dataURI);
           });
 
         // }
