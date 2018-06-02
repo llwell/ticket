@@ -127,7 +127,8 @@
         this.$router.push('/')
       },
       onRead(file) {
-
+        var sd = document.getElementById("ttt");
+        sd.exifdata = null;
         //console.log(file)
         if(file.content.length<=(100 * 1024)){
           // console.log(1)
@@ -249,7 +250,7 @@
           var result;
 
           var myimage = document.getElementById("ttt");
-          myimage.exifdata = null;
+
           EXIF.getData(myimage, function() {
             that.Orientation = EXIF.getTag(this, 'Orientation');
             console.log(EXIF.getAllTags(this));
