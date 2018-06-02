@@ -307,18 +307,20 @@
 
 
           dataURI = canvas.toDataURL(file.type || 'image/jpeg', quality);
-          result = dataURIToBlob(dataURI);
-          var reader = new FileReader();
-          reader.readAsDataURL(result);
-          reader.onload = function () {
-            //console.log(this.result);
-            callback(this.result);
-          };
+          // result = dataURIToBlob(file.type || 'image/jpeg', dataURI);
+          // var reader = new FileReader();
+          // reader.readAsDataURL(result);
+          // reader.onload = function () {
+          //   //console.log(this.result);
+          //   callback(this.result);
+          // };
+
+            callback(dataURI);
           });
-          //callback(null, result);
+
         // }
 
-        function dataURIToBlob(dataURI) {
+        function dataURIToBlob(fileType, dataURI) {
           var type = dataURI.match(/data:([^;]+)/)[1];
           var base64 = dataURI.replace(/^[^,]+,/, '');
           var byteString = atob(base64);
@@ -328,13 +330,13 @@
           }
           var blob;
           try {
-            blob = new Blob([ia], {type: 'image/jpg'});
+            blob = new Blob([ia], {type: fileType});
           } catch (e) {
             window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
             if(e.name === 'TypeError' && window.BlobBuilder){
               var blobBuilder = new BlobBuilder();
               blobBuilder.append(ia);
-              blob = blobBuilder.getBlob('image/jpg');
+              blob = blobBuilder.getBlob(fileType);
             }
           }
           return blob
