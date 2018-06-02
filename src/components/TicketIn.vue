@@ -127,8 +127,8 @@
         this.$router.push('/')
       },
       onRead(file) {
-        var sd = document.getElementById("ttt");
-        sd.exifdata = undefined;
+        // var sd = document.getElementById("ttt");
+        // sd.exifdata = undefined;
         //console.log(file)
         if(file.content.length<=(100 * 1024)){
           // console.log(1)
