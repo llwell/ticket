@@ -72,6 +72,7 @@
     name: 'HelloWorld',
     data () {
       return {
+        Orientation:0,
         clickTIme:'',
         disabled:false,
         picdisable:'',
@@ -235,10 +236,11 @@
         }
         return returnMes;
       },
-      compress(file, quality, callback) {
 
+      compress(file, quality, callback) {
+        var that = this;
         compressImage();
-        
+
 
         function compressImage() {
           var canvas = document.createElement('canvas');
@@ -248,10 +250,11 @@
 
           var myimage = document.getElementById("ttt");
 
-          var Orientation;
-          EXIF.getData(myimage, function() {
-            Orientation = EXIF.getTag(myimage, 'Orientation');
 
+          EXIF.getData(myimage, function() {
+            that.Orientation = EXIF.getTag(myimage, 'Orientation');
+            console.log(EXIF.getAllTags(this));
+            console.log(EXIF.getTag(this, 'Orientation'));
 
 
             if (typeof myimage.naturalWidth == "undefined") {
@@ -266,9 +269,9 @@
             canvas.width = myimage.naturalWidth;
             canvas.height = myimage.naturalHeight;
           }
-          console.log(Orientation);
+          console.log(that.Orientation);
           // Toast('这里是Orientation'+Orientation)
-          switch (Orientation){
+          switch (that.Orientation){
             case 6:
               // Toast('这里是6')
               ctx = canvas.getContext('2d');
