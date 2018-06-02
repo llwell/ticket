@@ -240,10 +240,10 @@
 
       compress(file, quality, callback) {
         var that = this;
-        // compressImage();
-        //
-        //
-        // function compressImage() {
+        compressImage();
+
+
+        function compressImage() {
           var canvas = document.createElement('canvas');
           var ctx;
           var dataURI;
@@ -278,7 +278,7 @@
               canvas.height = myimage.naturalWidth;
               canvas.width = myimage.naturalHeight;
               ctx.rotate(0.5*Math.PI);
-              ctx.drawImage(myimage, 0, -myimage.naturalHeight);
+              ctx.drawImage(document.getElementById("ttt"), 0, -myimage.naturalHeight);
               break;
             case 8:
               // Toast('这里是8')
@@ -286,7 +286,7 @@
               canvas.height = myimage.naturalWidth;
               canvas.width = myimage.naturalHeight;
               ctx.rotate(-0.5*Math.PI);
-              ctx.drawImage(myimage, -myimage.naturalWidth, 0);
+              ctx.drawImage(document.getElementById("ttt"), -myimage.naturalWidth, 0);
               break;
             case 3:
               // Toast('这里是3')
@@ -294,14 +294,14 @@
               canvas.width = myimage.naturalWidth;
               canvas.height = myimage.naturalHeight;
               ctx.rotate(Math.PI);
-              ctx.drawImage(myimage, -myimage.naturalWidth, -myimage.naturalHeight);
+              ctx.drawImage(document.getElementById("ttt"), -myimage.naturalWidth, -myimage.naturalHeight);
               break;
             default:
               // Toast('这里是default')
               ctx = canvas.getContext('2d');
               canvas.width = myimage.naturalWidth;
               canvas.height = myimage.naturalHeight;
-              ctx.drawImage(myimage, 0, 0);
+              ctx.drawImage(document.getElementById("ttt"), 0, 0);
               break;
           }
 
@@ -318,7 +318,7 @@
             // callback(dataURI);
           });
 
-        // }
+        }
 
         function dataURIToBlob(fileType, dataURI) {
           var type = dataURI.match(/data:([^;]+)/)[1];
@@ -330,13 +330,13 @@
           }
           var blob;
           try {
-            blob = new Blob([ia], {type: fileType});
+            blob = new Blob([ia], {type: 'image/jpeg'});
           } catch (e) {
             window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
             if(e.name === 'TypeError' && window.BlobBuilder){
               var blobBuilder = new BlobBuilder();
               blobBuilder.append(ia);
-              blob = blobBuilder.getBlob(fileType);
+              blob = blobBuilder.getBlob('image/jpeg');
             }
           }
           return blob
